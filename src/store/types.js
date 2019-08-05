@@ -1,5 +1,6 @@
 // GETTERS
 export const GET_USER = "user/GET_USER";
+export const GET_IS_AUTHENTICATED = "user/GET_IS_AUTHENTICATED";
 
 // MUTATIONS
 export const MUTATION_AUTH_USER = "user/MUTATION_AUTH_USER";

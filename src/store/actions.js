@@ -1,6 +1,7 @@
 import * as types from "@/store/types.js";
 import axios from "@/axios-auth.js";
 import globalAxios from "axios";
+import router from "@/router.js";
 
 export default {
   [types.SIGN_UP]: ({ commit, dispatch }, authData) => {
@@ -29,7 +30,7 @@ export default {
       .catch(error => console.log(error));
   },
 
-  [types.SIGN_IN]: ({ commit, dispatch }, authData) => {
+  [types.SIGN_IN]: ({ commit }, authData) => {
     axios
       .post(
         "/accounts:signInWithPassword?key=AIzaSyAxUHkg7axlyO93d3iEw_hMdtTVvbkMJGk",
@@ -53,12 +54,12 @@ export default {
 
         commit(types.MUTATION_AUTH_USER, userData);
 
-        //dispatch(types.FETCH_USER, userData);
+        router.push("/dashboard");
       })
       .catch(error => console.log(error));
   },
 
-  [types.STORE_USER]: ({ commit, state }, userData) => {
+  [types.STORE_USER]: ({ state }, userData) => {
     if (!state.idToken) {
       return;
     }
@@ -71,7 +72,6 @@ export default {
           "User data:",
           userData
         );
-        //commit(types.MUTATION_STORE_USER, userData.data);
       })
       .catch(error => {
         console.log(error);

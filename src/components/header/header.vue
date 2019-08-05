@@ -5,19 +5,32 @@
     </div>
     <nav>
       <ul>
-        <li>
+        <li v-if="!isAuthenticated">
           <router-link to="/signup">Sign Up</router-link>
         </li>
-        <li>
+        <li v-if="!isAuthenticated">
           <router-link to="/signin">Sign In</router-link>
         </li>
-        <li>
+        <li v-if="isAuthenticated">
           <router-link to="/dashboard">Dashboard</router-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+import * as types from "@/store/types.js";
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+      isAuthenticated: types.GET_IS_AUTHENTICATED
+    })
+  }
+};
+</script>
 
 <style scoped>
 #header {
