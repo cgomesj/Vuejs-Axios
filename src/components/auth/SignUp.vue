@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import axios from "@/axios-auth.js";
+import * as types from "@/store/types.js";
 
 export default {
   data() {
@@ -103,11 +103,8 @@ export default {
         hobbies: this.hobbyInputs.map(hobby => hobby.value),
         terms: this.terms
       };
-      console.log(formData);
-      axios
-        .post("/users.json", formData)
-        .then(response => console.log(response))
-        .catch(error => console.log(error));
+
+      this.$store.dispatch(types.SIGN_UP, formData);
     }
   }
 };

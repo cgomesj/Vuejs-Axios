@@ -19,20 +19,26 @@
 </template>
 
 <script>
+import * as types from "@/store/types.js";
+
 export default {
   data() {
     return {
-      email: "",
-      password: ""
+      email: "bill.evans@mail.com",
+      password: "billybilly"
     };
   },
+
   methods: {
     onSubmit() {
       const formData = {
         email: this.email,
         password: this.password
       };
+
       console.log(formData);
+
+      this.$store.dispatch(types.SIGN_IN, formData);
     }
   }
 };

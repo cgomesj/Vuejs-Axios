@@ -1,37 +1,35 @@
 <template>
   <div id="dashboard">
     <h1>That's the dashboard!</h1>
-    <p>You should only get here if you're authenticated!</p>
-    <p>Your email address: {{ email }}</p>
+    <div v-if="user">
+      <p>User mail: {{ email }}</p>
+    </div>
+    <div v-else>
+      <p>To see your informations, please login or signup!</p>
+      <div class="cta">
+        <router-link to="/">Go Home</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import * as types from "@/store/types.js";
+import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      email: ""
-    };
+  computed: {
+    ...mapGetters({
+      user: types.GET_USER
+    }),
+
+    email() {
+      return this.user ? this.user.email : false;
+    }
   },
 
   created() {
-    axios
-      .get("/users.json")
-      .then(response => {
-        console.log(response);
-        const data = response.data;
-        const users = [];
-        for (let key in data) {
-          const user = data[key];
-          user.id = key;
-          users.push(user);
-        }
-        console.log(users);
-        this.email = users[0].email;
-      })
-      .catch(error => console.log(error));
+    this.$store.dispatch(types.FETCH_USER);
   }
 };
 </script>

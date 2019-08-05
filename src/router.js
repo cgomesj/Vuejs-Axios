@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import WelcomePage from "./views/Welcome.vue";
+import store from "@/store/store.js";
 
 Vue.use(Router);
 
@@ -26,6 +27,13 @@ export default new Router({
     {
       path: "/dashboard",
       name: "dashboard",
+      beforeEnter(to, from, next) {
+        if (store.state.idToken) {
+          next();
+        } else {
+          next("/signin");
+        }
+      },
       component: () => import("@/components/dashboard/Dashboard")
     }
   ]
