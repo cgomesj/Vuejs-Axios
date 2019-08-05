@@ -4,6 +4,18 @@ import globalAxios from "axios";
 import router from "@/router.js";
 
 export default {
+  [types.CLEAR_AUTH_USER]: ({ commit }) => {
+    commit(types.MUTATION_CLEAR_AUTH_USER);
+    router.replace("/");
+  },
+
+  [types.LOGOUT_TIMER]: ({ dispatch }, expirationTime) => {
+    console.log("Timer started.", "Time left:", expirationTime);
+    setTimeout(() => {
+      dispatch(types.CLEAR_AUTH_USER);
+    }, expirationTime * 1000);
+  },
+
   [types.SIGN_UP]: ({ commit, dispatch }, authData) => {
     axios
       .post("/accounts:signUp?key=AIzaSyAxUHkg7axlyO93d3iEw_hMdtTVvbkMJGk", {
@@ -26,11 +38,13 @@ export default {
         commit(types.MUTATION_AUTH_USER, userData);
 
         dispatch(types.STORE_USER, authData);
+
+        dispatch(types.LOGOUT_TIMER, response.data.expiresIn);
       })
       .catch(error => console.log(error));
   },
 
-  [types.SIGN_IN]: ({ commit }, authData) => {
+  [types.SIGN_IN]: ({ commit, dispatch }, authData) => {
     axios
       .post(
         "/accounts:signInWithPassword?key=AIzaSyAxUHkg7axlyO93d3iEw_hMdtTVvbkMJGk",
@@ -53,6 +67,8 @@ export default {
         };
 
         commit(types.MUTATION_AUTH_USER, userData);
+
+        dispatch(types.LOGOUT_TIMER, response.data.expiresIn);
 
         router.push("/dashboard");
       })
