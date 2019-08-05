@@ -12,6 +12,7 @@ export const MUTATION_STORE_USER = "user/MUTATION_STORE_USER";
 // ACTIONS
 export const CLEAR_AUTH_USER = "user/CLEAR_AUTH_USER";
 export const LOGOUT_TIMER = "user/LOGOUT_TIMER";
+export const AUTO_LOGIN = "user/AUTO_LOGIN";
 export const SIGN_UP = "user/SIGN_UP";
 export const SIGN_IN = "user/SIGN_IN";
 export const FETCH_USER = "user/FETCH_USER";

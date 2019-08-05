@@ -17,11 +17,25 @@ export default new Router({
     {
       path: "/signup",
       name: "signup",
+      beforeEnter(to, from, next) {
+        if (!store.state.idToken) {
+          next();
+        } else {
+          next("/");
+        }
+      },
       component: () => import("@/components/auth/SignUp")
     },
     {
       path: "/signin",
       name: "signin",
+      beforeEnter(to, from, next) {
+        if (!store.state.idToken) {
+          next();
+        } else {
+          next("/");
+        }
+      },
       component: () => import("@/components/auth/SignIn")
     },
     {

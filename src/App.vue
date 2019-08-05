@@ -6,11 +6,16 @@
 </template>
 
 <script>
+import * as types from "@/store/types.js";
 import AppHeader from "@/components/header/Header.vue";
 
 export default {
   components: {
     "app-header": AppHeader
+  },
+
+  created() {
+    this.$store.dispatch(types.AUTO_LOGIN);
   }
 };
 </script>

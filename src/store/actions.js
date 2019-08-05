@@ -6,6 +6,9 @@ import router from "@/router.js";
 export default {
   [types.CLEAR_AUTH_USER]: ({ commit }) => {
     commit(types.MUTATION_CLEAR_AUTH_USER);
+    localStorage.removeItem("idToken");
+    localStorage.removeItem("localId");
+    localStorage.removeItem("expirationDate");
     router.replace("/");
   },
 
@@ -14,6 +17,30 @@ export default {
     setTimeout(() => {
       dispatch(types.CLEAR_AUTH_USER);
     }, expirationTime * 1000);
+  },
+
+  [types.AUTO_LOGIN]: ({ commit }) => {
+    const idToken = localStorage.getItem("idToken");
+    const localId = localStorage.getItem("localId");
+
+    if (!idToken || !localId) {
+      return;
+    }
+
+    const expirationDate = localStorage.getItem("expirationDate");
+    const now = new Date();
+
+    if (now >= expirationDate) {
+      return;
+    }
+
+    const userData = {
+      idToken,
+      localId
+    };
+
+    commit(types.MUTATION_AUTH_USER, userData);
+    router.replace("/dashboard");
   },
 
   [types.SIGN_UP]: ({ commit, dispatch }, authData) => {
@@ -36,6 +63,15 @@ export default {
         };
 
         commit(types.MUTATION_AUTH_USER, userData);
+
+        const now = new Date();
+        const expirationDate = new Date(
+          now.getTime() + response.data.expiresIn * 1000
+        );
+
+        localStorage.setItem("idToken", userData.idToken);
+        localStorage.setItem("localId", userData.localId);
+        localStorage.setItem("expirationDate", expirationDate);
 
         dispatch(types.STORE_USER, authData);
 
@@ -67,6 +103,15 @@ export default {
         };
 
         commit(types.MUTATION_AUTH_USER, userData);
+
+        const now = new Date();
+        const expirationDate = new Date(
+          now.getTime() + response.data.expiresIn * 1000
+        );
+
+        localStorage.setItem("idToken", userData.idToken);
+        localStorage.setItem("localId", userData.localId);
+        localStorage.setItem("expirationDate", expirationDate);
 
         dispatch(types.LOGOUT_TIMER, response.data.expiresIn);
 

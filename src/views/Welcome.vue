@@ -6,11 +6,27 @@
       sign up) away from it!
     </p>
     <div class="cta">
-      <router-link to="/signup">Sign Up</router-link>
-      <router-link to="/signin">Sign In</router-link>
+      <router-link v-if="!isAuthenticated" to="/signup">Sign Up</router-link>
+      <router-link v-if="!isAuthenticated" to="/signin">Sign In</router-link>
+      <router-link v-if="isAuthenticated" to="/dashboard"
+        >Go to your Dashboard</router-link
+      >
     </div>
   </div>
 </template>
+
+<script>
+import * as types from "@/store/types.js";
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+      isAuthenticated: types.GET_IS_AUTHENTICATED
+    })
+  }
+};
+</script>
 
 <style scoped>
 #welcome {
